@@ -5,11 +5,18 @@
   "author": "Elvin Dzhavadov",
   "license": "MIT",
   "private": false,
+  "scripts": {
+    "start": "pm2 start ./src/index.js -- name=\"Get-match\"",
+    "stop": "pm2 stop \"Get-match\"",
+    "restart": "pm2 restart all",
+    "db:destroy": "node ./src/db/destroy"
+  },
   "dependencies": {
     "config": "^1.28.1",
     "download": "^6.2.5",
     "iconv-lite": "^0.4.19",
     "node-telegram-bot-api": "^0.29.0",
+    "pm2": "^2.7.2",
     "pouchdb-find": "^6.3.4",
     "pouchdb-node": "^6.3.4",
     "request-promise": "^4.2.2",
