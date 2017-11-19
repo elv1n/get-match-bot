@@ -1,0 +1,27 @@
+{
+  "name": "get-match-bot",
+  "version": "0.0.1",
+  "main": "src/index.js",
+  "author": "Elvin Dzhavadov",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "config": "^1.28.1",
+    "download": "^6.2.5",
+    "iconv-lite": "^0.4.19",
+    "node-telegram-bot-api": "^0.29.0",
+    "pouchdb-find": "^6.3.4",
+    "pouchdb-node": "^6.3.4",
+    "request-promise": "^4.2.2",
+    "scrape-it": "^4.0.0",
+    "windows-1251": "^1.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.11.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-prettier": "^2.3.1",
+    "prettier": "^1.8.2"
+  }
+}

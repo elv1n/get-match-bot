@@ -1,0 +1,7 @@
+.idea
+node_modules
+assets
+config/default.json
+_errors
+_output
+yarn-error.log

@@ -1,0 +1,10 @@
+{
+    "telegram": {
+        "token": "",
+        "channel": ""
+    },
+    "streamable": {
+        "username": "",
+        "password": ""
+    }
+}
