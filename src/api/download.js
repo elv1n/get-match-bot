@@ -24,6 +24,7 @@ const downloadSource = async video => {
         await download('https:' + video, dist, formData);
         return formData;
     } catch(e) {
+		console.log(e);
         console.log('cannot download', video);
         return null;
     }
