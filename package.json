@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "start": "pm2 start ./src/index.js -- name=\"Get-match\"",
+    "start": "pm2 start ./src/index.js --name=\"Get-match\"",
     "stop": "pm2 stop \"Get-match\"",
     "restart": "pm2 restart all",
     "db:destroy": "node ./src/db/destroy"
