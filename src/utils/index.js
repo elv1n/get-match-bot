@@ -3,14 +3,29 @@ const scrapeIt = require('./scrapeIt');
 const { SERVICES, PRIORITY } = require('../constants');
 const { matchInfo } = require('./parser');
 
+/**
+ * Find video service from constants by link
+ * @param link
+ */
+const getService = link => SERVICES.find(s => link.includes(s.domain));
+
+const getServiceName = link => {
+	const service = getService(link);
+	return service && service.name;
+};
+
 function serviceScrape(link) {
-	const service = SERVICES.find(({ domain }) => link.includes(domain));
+	const service = getService(link);
 	if (!service) {
 		// console.log(`Cannot find service for link ${link}`);
 		return null;
 	}
 	return Object.assign({ link }, service);
 }
+
+const linksByPriority = (a, b) =>
+	PRIORITY.indexOf(getServiceName(a.link)) -
+	PRIORITY.indexOf(getServiceName(b.link));
 
 function getPreferService(links) {
 	const grab = links
@@ -45,6 +60,8 @@ const videoIsAvailable = url =>
 module.exports = {
 	getDist,
 	getAssets,
+	getService,
+	linksByPriority,
 	scrapeIt,
 	matchInfo,
 	getPreferService,

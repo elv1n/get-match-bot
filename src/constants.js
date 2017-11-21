@@ -1,15 +1,46 @@
 const STREAMABLE = 'STREAMABLE';
+const OK = 'OK';
+const VK = 'VK';
 
-const PRIORITY = [STREAMABLE];
+const PRIORITY = [VK, STREAMABLE, OK];
 const SERVICES = [
 	{
 		domain: 'streamable.com',
-		order: 1,
 		name: STREAMABLE,
 		scrape: {
 			file: {
 				selector: '#download',
 				attr: 'href'
+			}
+		}
+	},
+	{
+		domain: 'vk.com',
+		name: VK,
+		scrape: {
+			file: {
+				selector: '#video_player source',
+				attr: 'src'
+			}
+		}
+	},
+	{
+		domain: 'ok.ru',
+		name: OK,
+		scrape: {
+			file: {
+				selector: '[data-module="OKVideo"]',
+				attr: 'data-options',
+				convert: options => {
+					options = JSON.parse(options);
+					if (options && options.flashvars) {
+						const { videos } = JSON.parse(
+							options.flashvars.metadata
+						);
+						return videos.reverse()[0].url;
+					}
+					return null;
+				}
 			}
 		}
 	}

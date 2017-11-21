@@ -8,6 +8,7 @@ const parser = require('../utils/parser');
 const { scrapeIt } = utils;
 
 const checker = require('./checker');
+const parseUrl = require('./parser');
 
 const URL = 'http://gooool.org/';
 const HIGHLIGHTS = `${URL}obzors`;
@@ -53,35 +54,23 @@ const getMatch = async ({ link }) => {
 };
 
 const getLinks = async (pages) => {
-	const getAllFiles = pages.reduce(
-		(scrapes, { reviews, title, pathname }) => {
+	return await Promise.all(pages.map(
+		async ({ reviews, title, pathname }) => {
 			const matchInfo = parser.matchInfo(title);
 			const links = reviews.map(({ link }) => link).filter(Boolean);
-			const service = utils.getPreferService(links);
-			if (!service) {
-				return scrapes;
+			const result = await parseUrl.findValidService(links);
+			if (result && result.file) {
+				return {
+					...matchInfo,
+					...result,
+					_id: pathname,
+				};
+			} else {
+				console.log('Valid links not found', links);
+				return null;
 			}
-
-			const scrapeService = scrapeIt(service.link, service.scrape)
-				.then((result) => {
-					if (!result) {
-						return null;
-					}
-					return Object.assign({}, matchInfo, {
-						file: result.file,
-						link: service.link,
-						_id: pathname,
-					});
-				})
-				.catch((err) => {
-					console.log('Cannot work with', service);
-				});
-
-			return [...scrapes, scrapeService];
-		},
-		[],
-	);
-	return Promise.all(getAllFiles.filter(Boolean));
+		}
+	));
 };
 
 const generateResults = async matches => {
