@@ -12,8 +12,8 @@ const parseUrl = require('./parser');
 
 const MATCH = require('../constants').MATCH;
 
-const getHighlights = async () => {
-	const { highlights } = await scrapeIt(MATCH.HIGHLIGHTS, {
+const getHighlights = async url => {
+	const { highlights } = await scrapeIt(url, {
 		highlights: {
 			listItem: MATCH.LINKS_SELECTOR,
 			data: {
@@ -55,7 +55,12 @@ const generateResults = async matches => {
 };
 
 const run = async () => {
-	const highlights = await getHighlights();
+	const highlights = [
+		...await getHighlights(MATCH.HIGHLIGHTS + '/page/1'),
+		...await getHighlights(MATCH.HIGHLIGHTS + '/page/2'),
+		...await getHighlights(MATCH.HIGHLIGHTS + '/page/3'),
+		...await getHighlights(MATCH.HIGHLIGHTS + '/page/4')
+	];
 	const links = await Promise.all(highlights.map(async page => await parseUrl.getLinks(page)));
 	await generateResults(links);
 };
