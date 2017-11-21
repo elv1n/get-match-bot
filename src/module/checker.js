@@ -93,14 +93,14 @@ const checkUploadInit = async () => {
 	);
 };
 
-const run = async () => {
-	await checkDownload();
-	await checkUploaded();
-	await checkUploadInit();
+const run = () => {
+	checkDownload();
+	checkUploaded();
+	checkUploadInit();
 };
 /**
  * Run all check functions every 30 minutes
  */
-const init = () => setInterval(() => run(), 1000 * 60 * 30);
+const init = () => setInterval(() => run(), 1000 * 60 * 15);
 
 module.exports = { run, init };
