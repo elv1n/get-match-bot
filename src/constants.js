@@ -49,8 +49,17 @@ const SERVICES = [
 const links = {
 	[STREAMABLE]: code => 'https://streamable.com/' + code
 };
+
+const URL = 'http://gooool.org/';
+const HIGHLIGHTS = `${URL}obzors`;
+const LINKS_SELECTOR = '.articles .item';
+
 module.exports = {
 	SERVICES,
 	PRIORITY,
-	links
+	links,
+	MATCH: {
+		HIGHLIGHTS,
+		LINKS_SELECTOR
+	}
 };

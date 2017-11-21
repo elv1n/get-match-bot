@@ -6,28 +6,28 @@ const dist = require('../utils').getDist();
 
 /**
  * Download video by url to server
- * 
+ *
  * @param {string} video url
- * @returns {FormData|null} return object with filename when download successfully or null when catch error 
+ * @returns {FormData|null} return object with filename when download successfully or null when catch error
  */
-const downloadSource = async video => {    
-    const videoPath = url.parse(video).pathname;
-    const videoFile = path.basename(videoPath);
+const downloadSource = async video => {
+	const videoPath = url.parse(video).pathname;
+	const videoFile = path.basename(videoPath);
 
-    const formData = {
-        filename: videoFile
-    };
+	const formData = {
+		filename: videoFile
+	};
 
-    //video = '//cf-e2.streamablevideo.com/video/mp4/bwkxc_1.mp4?token=1510767987-EBdi%2FrpybheHOXFWi%2FIR%2BC7Rc6T7rGwT7uIDo%2Fk%2FEuk%3D';
+	//video = '//cf-e2.streamablevideo.com/video/mp4/bwkxc_1.mp4?token=1510767987-EBdi%2FrpybheHOXFWi%2FIR%2BC7Rc6T7rGwT7uIDo%2Fk%2FEuk%3D';
 
-    try {
-        await download('https:' + video, dist, formData);
-        return formData;
-    } catch(e) {
+	try {
+		await download('https:' + video, dist, formData);
+		return formData;
+	} catch (e) {
+		console.log('cannot download', video);
 		console.log(e);
-        console.log('cannot download', video);
-        return null;
-    }
+		return null;
+	}
 };
 
 module.exports = downloadSource;

@@ -5,70 +5,94 @@
 const PouchDB = require('pouchdb-node');
 PouchDB.plugin(require('pouchdb-find'));
 
+const resetInDownload = require('./methods/resetInDownload');
+
 const utils = require('../utils');
 
 const db = new PouchDB(utils.getAssets('/db/matches'));
 
-db.info().then(function (result) {
-    // handle result
-    console.log(result)
-  }).catch(function (err) {
-    console.log(err);
-});
+db
+	.info()
+	.then(result => {
+		// handle result
+		console.log(result);
+	})
+	.catch(err => {
+		console.log(err);
+	});
 
 /**
  * Init indexes before start
  */
-const init = () => db.createIndex({ index: {
-    fields: ['download', 'inDownload', 'uploaded', 'inUpload', 'send']
-  }});
+const init = () =>
+	db
+		.createIndex({
+			index: {
+				fields: [
+					'download',
+					'inDownload',
+					'uploaded',
+					'inUpload',
+					'send'
+				]
+			}
+		})
+		.then(() => resetInDownload(db));
 
 /**
  * Check id on existing in db
- * @param {string} id 
+ * @param {string} id
  */
-const exist = (id) => {
-    return db.get(id).then(function () {
-        return Promise.resolve(true);
-    }).catch(function () {
-        return Promise.resolve(false);
-    });
+const exist = id => {
+	return db
+		.get(id)
+		.then(() => {
+			return Promise.resolve(true);
+		})
+		.catch(() => {
+			return Promise.resolve(false);
+		});
 };
 
 /**
  * Handler to update db record
- * @param {string} id 
- * @param {object} data 
+ * @param {string} id
+ * @param {object} data
  */
 const update = (id, data) =>
-    db.get(id).then(doc =>
-        db.put(Object.assign({}, doc, data, { _rev: doc._rev })).then(() => console.log('up db', data))
-    );
+	db
+		.get(id)
+		.then(doc =>
+			db
+				.put(Object.assign({}, doc, data, { _rev: doc._rev }))
+				.then(() => console.log('up db', data))
+		);
 
 /**
  * Find and collect all documents by indexed parameters
- * @param {object} selector 
+ * @param {object} selector
  */
 const findBy = selector =>
-    db.find({
-            selector,
-            fields: ['_id']
-        })
-        .then(({docs}) => Promise.all(docs.map(({_id}) => db.get(_id))));
+	db
+		.find({
+			selector,
+			fields: ['_id']
+		})
+		.then(({ docs }) => Promise.all(docs.map(({ _id }) => db.get(_id))));
 
 /**
  * Prevent from crash when save data asynchronous
- * @param {string, object} args 
+ * @param {string, object} args
  */
 const updateOrWait = async (...args) => {
-    try {
-        await update(...args);
-        return 'success';
-    } catch (e) {
-        if (e.status === 409) {
-            await setTimeout(() => updateOrWait(...args), 1000);
-        }
-    }
+	try {
+		await update(...args);
+		return 'success';
+	} catch (e) {
+		if (e.status === 409) {
+			await setTimeout(() => updateOrWait(...args), 1000);
+		}
+	}
 };
 
 module.exports = db;

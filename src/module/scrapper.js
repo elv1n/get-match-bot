@@ -10,14 +10,12 @@ const { scrapeIt } = utils;
 const checker = require('./checker');
 const parseUrl = require('./parser');
 
-const URL = 'http://gooool.org/';
-const HIGHLIGHTS = `${URL}obzors`;
-const LINKS_SELECTOR = '.articles .item';
+const MATCH = require('../constants').MATCH;
 
 const getHighlights = async () => {
-	const { highlights } = await scrapeIt(HIGHLIGHTS, {
+	const { highlights } = await scrapeIt(MATCH.HIGHLIGHTS, {
 		highlights: {
-			listItem: LINKS_SELECTOR,
+			listItem: MATCH.LINKS_SELECTOR,
 			data: {
 				link: {
 					selector: 'a',
@@ -27,50 +25,7 @@ const getHighlights = async () => {
 		}
 	});
 
-	return await Promise.all(highlights.map(async (match) => await getMatch(match)));
-};
-
-const getMatch = async ({ link }) => {
-	const pathname = path.basename(link, path.extname(link));
-
-	const match = await scrapeIt(link, {
-		title: {
-			selector: 'title',
-			how: 'text'
-		},
-		reviews: {
-			listItem: '.article-main td',
-			data: {
-				link: {
-					selector: 'a',
-					attr: 'onclick',
-					convert: parser.link
-				}
-			}
-		}
-	});
-
-	return { ...match, pathname };
-};
-
-const getLinks = async (pages) => {
-	return await Promise.all(pages.map(
-		async ({ reviews, title, pathname }) => {
-			const matchInfo = parser.matchInfo(title);
-			const links = reviews.map(({ link }) => link).filter(Boolean);
-			const result = await parseUrl.findValidService(links);
-			if (result && result.file) {
-				return {
-					...matchInfo,
-					...result,
-					_id: pathname,
-				};
-			} else {
-				console.log('Valid links not found', links);
-				return null;
-			}
-		}
-	));
+	return await Promise.all(highlights.map(async (match) => await parseUrl.getMatch(match)));
 };
 
 const generateResults = async matches => {
@@ -101,7 +56,7 @@ const generateResults = async matches => {
 
 const run = async () => {
 	const highlights = await getHighlights();
-	const links = await getLinks(highlights);
+	const links = await Promise.all(highlights.map(async page => await parseUrl.getLinks(page)));
 	await generateResults(links);
 };
 
