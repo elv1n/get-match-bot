@@ -2383,6 +2383,15 @@ normalize-space-x@^3.0.0:
     trim-x "^3.0.0"
     white-space-x "^3.0.0"
 
+normalize-url@^1.9.1:
+  version "1.9.1"
+  resolved "http://37.187.163.104:4873/normalize-url/-/normalize-url-1.9.1/2cc0d66b31ea23036458436e3620d85954c66c3c.tgz#2cc0d66b31ea23036458436e3620d85954c66c3c"
+  dependencies:
+    object-assign "^4.0.1"
+    prepend-http "^1.0.0"
+    query-string "^4.1.0"
+    sort-keys "^1.0.0"
+
 npm-conf@^1.1.0:
   version "1.1.3"
   resolved "http://37.187.163.104:4873/npm-conf/-/npm-conf-1.1.3/256cc47bd0e218c259c4e9550bf413bc2192aff9.tgz#256cc47bd0e218c259c4e9550bf413bc2192aff9"
@@ -2847,7 +2856,7 @@ prelude-ls@~1.1.2:
   version "1.1.2"
   resolved "http://37.187.163.104:4873/prelude-ls/-/prelude-ls-1.1.2/21932a549f5e52ffd9a827f570e04be62a97da54.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
 
-prepend-http@^1.0.1:
+prepend-http@^1.0.0, prepend-http@^1.0.1:
   version "1.0.4"
   resolved "http://37.187.163.104:4873/prepend-http/-/prepend-http-1.0.4/d4f4562b0ce3696e41ac52d0e002e57a635dc6dc.tgz#d4f4562b0ce3696e41ac52d0e002e57a635dc6dc"
 
@@ -2918,6 +2927,13 @@ qs@~6.4.0:
 qs@~6.5.1:
   version "6.5.1"
   resolved "http://37.187.163.104:4873/qs/-/qs-6.5.1/349cdf6eef89ec45c12d7d5eb3fc0c870343a6d8.tgz#349cdf6eef89ec45c12d7d5eb3fc0c870343a6d8"
+
+query-string@^4.1.0:
+  version "4.3.4"
+  resolved "http://37.187.163.104:4873/query-string/-/query-string-4.3.4/bbb693b9ca915c232515b228b1a02b609043dbeb.tgz#bbb693b9ca915c232515b228b1a02b609043dbeb"
+  dependencies:
+    object-assign "^4.1.0"
+    strict-uri-encode "^1.0.0"
 
 randomatic@^1.1.3:
   version "1.1.7"
@@ -3397,6 +3413,10 @@ stealthy-require@^1.1.0:
 stream-consume@^0.1.0:
   version "0.1.0"
   resolved "http://37.187.163.104:4873/stream-consume/-/stream-consume-0.1.0/a41ead1a6d6081ceb79f65b061901b6d8f3d1d0f.tgz#a41ead1a6d6081ceb79f65b061901b6d8f3d1d0f"
+
+strict-uri-encode@^1.0.0:
+  version "1.1.0"
+  resolved "http://37.187.163.104:4873/strict-uri-encode/-/strict-uri-encode-1.1.0/279b225df1d582b1f54e65addd4352e18faa0713.tgz#279b225df1d582b1f54e65addd4352e18faa0713"
 
 string-width@^1.0.1, string-width@^1.0.2:
   version "1.0.2"

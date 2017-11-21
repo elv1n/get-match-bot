@@ -1,4 +1,5 @@
 const scrapeItOriginal = require('scrape-it');
+const normalizeUrl = require('normalize-url');
 const request = require('request-promise');
 const cheerio = require('cheerio');
 const iconv = require('iconv-lite');
@@ -15,7 +16,7 @@ const iconv = require('iconv-lite');
  */
 function scrapeIt(url, opts) {
 	return request({
-		url,
+		url: normalizeUrl(url),
 		encoding: null
 	})
 		.then(body => {

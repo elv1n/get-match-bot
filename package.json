@@ -16,6 +16,7 @@
     "download": "^6.2.5",
     "iconv-lite": "^0.4.19",
     "node-telegram-bot-api": "^0.29.0",
+    "normalize-url": "^1.9.1",
     "pm2": "^2.7.2",
     "pouchdb-find": "^6.3.4",
     "pouchdb-node": "^6.3.4",
