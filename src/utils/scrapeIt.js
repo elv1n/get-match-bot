@@ -16,7 +16,7 @@ const iconv = require('iconv-lite');
  */
 function scrapeIt(url, opts) {
 	return request({
-		url: normalizeUrl(url),
+		url: normalizeUrl(url, { removeTrailingSlash: false }),
 		encoding: null
 	})
 		.then(body => {
