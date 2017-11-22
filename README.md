@@ -3,6 +3,7 @@
 Code for telegram.me/get_match
 
 ### Features
-* Parse website and download found video files
-* Upload files to video hosting
+* Parse website and collect links to video hosting
+* Download videos from hosting. Support vk.com, streamable.com, ok.ru
+* Upload files to streamable
 * Send message with new links to telegram channel
