@@ -1,9 +1,6 @@
-const path = require('path');
-
 const DB = require('../db');
 
 const utils = require('../utils');
-const parser = require('../utils/parser');
 
 const { scrapeIt } = utils;
 
@@ -25,14 +22,17 @@ const getHighlights = async url => {
 		}
 	});
 
-	return await Promise.all(highlights.map(async (match) => await parseUrl.getMatch(match)));
+	return await Promise.all(
+		highlights.map(async match => await parseUrl.getMatch(match))
+	);
 };
 
 const generateResults = async matches => {
 	matches = matches.filter(Boolean);
 
 	// Save new matches to DB
-	const newMatches = await Promise.all(matches.map(async match => {
+	const newMatches = await Promise.all(
+		matches.map(async match => {
 			const exist = await DB.exist(match._id);
 			if (!exist) {
 				await DB.put({
@@ -41,12 +41,12 @@ const generateResults = async matches => {
 					uploaded: false,
 					send: false,
 					inDownload: false,
-					inUpload: false,
+					inUpload: false
 				});
 				return true;
 			}
 			return false;
-		}),
+		})
 	);
 
 	console.log('Save new matches: ', newMatches.filter(Boolean).length);
@@ -56,12 +56,14 @@ const generateResults = async matches => {
 
 const run = async () => {
 	const highlights = [
-		...await getHighlights(MATCH.HIGHLIGHTS + '/page/1/'),
-		...await getHighlights(MATCH.HIGHLIGHTS + '/page/2/'),
-		...await getHighlights('http://gooool.org/obzors/page/3/'),
-		...await getHighlights(MATCH.HIGHLIGHTS + '/page/4/')
+		...(await getHighlights(MATCH.HIGHLIGHTS + '/page/1/')),
+		...(await getHighlights(MATCH.HIGHLIGHTS + '/page/2/')),
+		...(await getHighlights(MATCH.HIGHLIGHTS + '/page/3/')),
+		...(await getHighlights(MATCH.HIGHLIGHTS + '/page/4/'))
 	];
-	const links = await Promise.all(highlights.map(async page => await parseUrl.getLinks(page)));
+	const links = await Promise.all(
+		highlights.map(async page => await parseUrl.getLinks(page))
+	);
 	await generateResults(links);
 };
 

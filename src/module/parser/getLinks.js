@@ -1,4 +1,3 @@
-const utils = require('../../utils');
 const parser = require('../../utils/parser');
 const findValidService = require('./findValidService');
 
@@ -11,10 +10,9 @@ module.exports = async ({ reviews, title, pathname, ...props }) => {
 			...matchInfo,
 			...result,
 			...props,
-			_id: pathname,
+			_id: pathname
 		};
-	} else {
-		console.log('Valid links not found', links);
-		return null;
 	}
+	console.log('Valid links not found', links);
+	return null;
 };

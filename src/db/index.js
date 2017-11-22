@@ -33,7 +33,8 @@ const init = () =>
 					'inDownload',
 					'uploaded',
 					'inUpload',
-					'send'
+					'send',
+					'message_id'
 				]
 			}
 		})

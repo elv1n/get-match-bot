@@ -9,11 +9,8 @@ module.exports = {
 	plugins: [ "prettier" ],
 	rules: {
 		curly: "error",
-		"import/no-extraneous-dependencies": [
-			"error",
-			{ devDependencies: [ "tests*/**", "scripts/**" ] }
-		],
 		"no-console": "off",
+		"strict": "off",
 		"no-else-return": "error",
 		"no-inner-declarations": "error",
 		"no-unneeded-ternary": "error",
@@ -25,7 +22,6 @@ module.exports = {
 		"prefer-arrow-callback": "error",
 		"prefer-const": "error",
 		"react/no-deprecated": "off",
-		strict: "error",
 		"symbol-description": "error",
 		yoda: [ "error", "never", { exceptRange: true } ],
 		"no-mixed-spaces-and-tabs": [2, "smart-tabs"],
@@ -41,5 +37,7 @@ module.exports = {
 			}
 		]
 	},
-	"parserOptions": { "ecmaVersion": 8 }
+	"parserOptions": {
+		"ecmaVersion": 8,
+		"ecmaFeatures": {"experimentalObjectRestSpread": true } }
 };

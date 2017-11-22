@@ -7,6 +7,20 @@ const utils = require('../utils');
 
 const reloadMatch = require('./parser/reloadMatch');
 
+const downloadProcess = async doc => {
+	await db.updateOrWait(doc._id, { inDownload: true });
+	const downloadedFile = await download(doc.file);
+	if (downloadedFile) {
+		await db.updateOrWait(doc._id, {
+			download: true,
+			localFilename: downloadedFile.filename
+		});
+	} else {
+		await db.updateOrWait(doc._id, { inDownload: false });
+		await reloadMatch(doc._id);
+	}
+};
+
 /**
  * Find all not downloaded docs and download it to server
  * For control download process and not start again use inDownloaded key
@@ -16,21 +30,11 @@ const checkDownload = async () => {
 	const docs = await db.findBy({ download: false, inDownload: false });
 	await Promise.all(
 		docs.map(async doc => {
-			await db.updateOrWait(doc._id, { inDownload: true });
-			try {
-				const downloadedFile = await download(doc.file);
-				if (downloadedFile) {
-					await db.updateOrWait(doc._id, {
-						download: true,
-						localFilename: downloadedFile.filename
-					});
-				} else {
-					await db.updateOrWait(doc._id, { inDownload: false });
-					await reloadMatch(doc._id);
-				}
-			} catch (e) {
-				await db.updateOrWait(doc._id, { inDownload: false });
+			if (utils.isOK(doc.link)) {
+				await reloadMatch(doc._id);
+				doc = await db.get(doc._id);
 			}
+			await downloadProcess(doc);
 		})
 	);
 };
@@ -79,7 +83,7 @@ const checkUploadInit = async () => {
 			if (alreadyUpload) {
 				try {
 					const { message_id } = await telegram.sendMatch(doc);
-					await db.updateOrWait(doc._id, { send: true });
+					await db.updateOrWait(doc._id, { send: true, message_id });
 					fs.unlink(utils.getDist(doc.localFilename), err => {
 						if (err) {
 							console.log('Cant delete file', err);
