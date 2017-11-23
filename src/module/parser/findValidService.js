@@ -9,7 +9,7 @@ const checkService = require('./checkService');
 const collectLinks = async links =>
 	await Promise.all(
 		links.map(async link => ({
-			file: await checkService(link),
+			...(await checkService(link)),
 			link
 		}))
 	);

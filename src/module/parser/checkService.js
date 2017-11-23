@@ -14,10 +14,12 @@ const checkService = async link => {
 	}
 
 	try {
-		const { file } = await utils.scrapeIt(link, service.scrape);
-		return file;
+		const result = await utils.scrapeIt(link, service.scrape);
+		if (typeof service.afterScrape === 'function') {
+			return service.afterScrape(result);
+		}
+		return result;
 	} catch (err) {
-		console.log('Cannot work with', link);
 		return null;
 	}
 };

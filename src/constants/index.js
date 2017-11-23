@@ -1,6 +1,6 @@
-const OK = require('./services/ok');
-const VK = require('./services/vk');
-const STREAMABLE = require('./services/streamable');
+const OK = require('../services/ok');
+const VK = require('../services/vk');
+const STREAMABLE = require('../services/streamable');
 
 const PRIORITY = [VK.domain, STREAMABLE.domain, OK.domain];
 const SERVICES = [VK, OK, STREAMABLE];

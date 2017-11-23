@@ -15,6 +15,7 @@
     "config": "^1.28.1",
     "download": "^6.2.5",
     "iconv-lite": "^0.4.19",
+    "lodash": "^4.17.4",
     "node-telegram-bot-api": "^0.29.0",
     "normalize-url": "^1.9.1",
     "pm2": "^2.7.2",
