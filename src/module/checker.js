@@ -28,24 +28,25 @@ const downloadProcess = async doc => {
  */
 const checkDownload = async () => {
 	const docs = await db.findBy({ download: false, inDownload: false });
-	docs.reduce(async (promise, doc) => {
-		await promise;
-		console.log(doc);
-		if (utils.isOK(doc.link)) {
-			await reloadMatch(doc._id);
-			doc = await db.get(doc._id);
-		}
-		return downloadProcess(doc);
-	}, Promise.resolve());
-	//await Promise.all(
-	//	docs.map(async doc => {
-	//		if (utils.isOK(doc.link)) {
-	//			await reloadMatch(doc._id);
-	//			doc = await db.get(doc._id);
-	//		}
-	//		await downloadProcess(doc);
-	//	})
-	//);
+	//docs.reduce(async (promise, doc) => {
+	//	await promise;
+	//	console.log(doc);
+	//	if (utils.isOK(doc.link)) {
+	//		await reloadMatch(doc._id);
+	//		doc = await db.get(doc._id);
+	//	}
+	//	return downloadProcess(doc);
+	//}, Promise.resolve());
+	//Async download
+	await Promise.all(
+		docs.map(async doc => {
+			if (utils.isOK(doc.link)) {
+				await reloadMatch(doc._id);
+				doc = await db.get(doc._id);
+			}
+			await downloadProcess(doc);
+		})
+	);
 };
 
 /**

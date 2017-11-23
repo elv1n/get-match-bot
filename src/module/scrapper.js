@@ -49,18 +49,16 @@ const generateResults = async matches => {
 		})
 	);
 
-	console.log('Save new matches: ', newMatches.filter(Boolean).length);
+	const savedNewMatches = newMatches.filter(Boolean).length;
+	if (savedNewMatches) {
+		console.log('Save new matches: ', savedNewMatches);
 
-	await checker.run();
+		await checker.run();
+	}
 };
 
 const run = async () => {
-	const highlights = [
-		...(await getHighlights(MATCH.HIGHLIGHTS + '/page/1/'))
-		//...(await getHighlights(MATCH.HIGHLIGHTS + '/page/2/')),
-		//...(await getHighlights(MATCH.HIGHLIGHTS + '/page/3/')),
-		//...(await getHighlights(MATCH.HIGHLIGHTS + '/page/4/'))
-	];
+	const highlights = await getHighlights(MATCH.HIGHLIGHTS + '/page/1/');
 	const links = await Promise.all(
 		highlights.map(async page => await parseUrl.getLinks(page))
 	);

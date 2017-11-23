@@ -11,7 +11,7 @@ const editURL = url => {
 const parseOptions = opts => {
 	try {
 		const options = JSON.parse(opts);
-		const { videos } = JSON.parse(options.flashvars.metadata);
+		const { videos } = JSON.parse(options.flashvars.metadata) || {};
 		const { url } = videos.reverse()[0];
 		return editURL(url);
 	} catch (e) {
