@@ -29,7 +29,7 @@ const getDist = name => getAssets(path.join('dist', name || ''));
 const videoIsAvailable = url =>
 	scrapeIt(url, {
 		video: { attr: 'poster', selector: '#video-player-tag' }
-	}).then(({ video }) => video && video.length);
+	}).then(res => res.video && res.video.length);
 
 /**
  * Is link is ok service
