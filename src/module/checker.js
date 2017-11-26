@@ -4,6 +4,7 @@ const download = require('../api/download');
 const stream = require('../api/stream');
 const utils = require('../utils');
 
+const badQuality = require('./process/badQuality');
 const reloadMatch = require('./parser/reloadMatch');
 
 const downloadProcess = async doc => {
@@ -70,11 +71,18 @@ const checkUploaded = async () => {
 
 const sendToTelegram = async doc => {
 	try {
-		const { message_id } = await telegram.sendMatch(doc);
-		await db.updateOrWait(doc._id, {
-			send: true,
-			message_id
-		});
+		if (Array.isArray(doc.videos)) {
+			await telegram.editMatch(doc);
+			await db.updateOrWait(doc._id, {
+				send: true
+			});
+		} else {
+			const { message_id } = await telegram.sendMatch(doc);
+			await db.updateOrWait(doc._id, {
+				send: true,
+				message_id
+			});
+		}
 		utils.deleteFromDist(doc.localFilename);
 	} catch (e) {
 		console.log(`Cannot sent to telegram`);
@@ -126,6 +134,7 @@ const run = () => {
 	checkDownload();
 	checkUploaded();
 	checkUploadInit();
+	badQuality();
 };
 /**
  * Run all check functions every 30 minutes

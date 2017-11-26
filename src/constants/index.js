@@ -12,7 +12,7 @@ const LINKS_SELECTOR = '.articles .item';
 module.exports = {
 	SERVICES,
 	PRIORITY,
-	MATCH: {
+	PARSE_RESOURCE: {
 		HIGHLIGHTS,
 		LINKS_SELECTOR
 	}

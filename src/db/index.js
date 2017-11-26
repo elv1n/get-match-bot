@@ -6,6 +6,7 @@ const PouchDB = require('pouchdb-node');
 PouchDB.plugin(require('pouchdb-find'));
 
 const resetInDownload = require('./methods/resetInDownload');
+const MATCH = require('../constants/match');
 
 const utils = require('../utils');
 
@@ -28,14 +29,7 @@ const init = () =>
 	db
 		.createIndex({
 			index: {
-				fields: [
-					'download',
-					'inDownload',
-					'uploaded',
-					'inUpload',
-					'send',
-					'message_id'
-				]
+				fields: MATCH.searchFields
 			}
 		})
 		.then(() => resetInDownload(db));

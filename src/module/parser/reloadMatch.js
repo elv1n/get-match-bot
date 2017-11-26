@@ -1,13 +1,19 @@
 const db = require('../../db');
-const MATCH = require('../../constants').MATCH;
+const PARSE_RESOURCE = require('../../constants').PARSE_RESOURCE;
 
 const getMatch = require('./getMatch');
 const getLinks = require('./getLinks');
 
-module.exports = async _id => {
+const parseMatch = async _id => {
 	const match = await getMatch({
-		link: MATCH.HIGHLIGHTS + '/' + _id + '.html'
+		link: PARSE_RESOURCE.HIGHLIGHTS + '/' + _id + '.html'
 	});
-	const matchWithLinks = await getLinks(match);
-	return await db.update(_id, matchWithLinks);
+	return await getLinks(match);
 };
+
+const reloadMatch = async _id => {
+	const match = await parseMatch(_id);
+	return await db.update(_id, match);
+};
+module.exports = reloadMatch;
+module.exports.parseMatch = parseMatch;

@@ -7,12 +7,13 @@ const { scrapeIt } = utils;
 const checker = require('./checker');
 const parseUrl = require('./parser');
 
-const MATCH = require('../constants').MATCH;
+const PARSE_RESOURCE = require('../constants').PARSE_RESOURCE;
+const MATCH = require('../constants/match');
 
 const getHighlights = async url => {
 	const { highlights } = await scrapeIt(url, {
 		highlights: {
-			listItem: MATCH.LINKS_SELECTOR,
+			listItem: PARSE_RESOURCE.LINKS_SELECTOR,
 			data: {
 				link: {
 					selector: 'a',
@@ -37,11 +38,8 @@ const generateResults = async matches => {
 			if (!exist) {
 				await DB.put({
 					...match,
-					download: false,
-					uploaded: false,
-					send: false,
-					inDownload: false,
-					inUpload: false
+					...MATCH.defaultProps,
+					timestamp: new Date()
 				});
 				return true;
 			}
@@ -58,7 +56,9 @@ const generateResults = async matches => {
 };
 
 const run = async () => {
-	const highlights = await getHighlights(MATCH.HIGHLIGHTS + '/page/1/');
+	const highlights = await getHighlights(
+		PARSE_RESOURCE.HIGHLIGHTS + '/page/1/'
+	);
 	const links = await Promise.all(
 		highlights.map(async page => await parseUrl.getLinks(page))
 	);
