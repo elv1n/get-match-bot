@@ -9,6 +9,7 @@
 ### Task list
 * [X] Control video duration
 * [X] When upload video less then 720p check links again for better quality
+* [ ] Support multiple telegram channels
 * [ ] Add vid.me hosting
 * [ ] Add youtube hosting
 * [ ] Upload video directly to streamable
