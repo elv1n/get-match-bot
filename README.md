@@ -12,6 +12,9 @@
 [x] When upload video less then 720p check links again for better quality
 
 [] Add vid.me hosting
+
 [] Add youtube hosting
+
 [] Upload video directly to streamable
+
 [] Control CPU memory when download a lot of videos
