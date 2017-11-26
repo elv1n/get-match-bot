@@ -18,16 +18,16 @@ function scrapeIt(url, opts) {
 	return request({
 		url: normalizeUrl(url, { removeTrailingSlash: false }),
 		encoding: null
-	})
-		.then(body => {
-			const utf8String = iconv.decode(body, 'windows-1251');
-			const $ = cheerio.load(utf8String);
+	}).then(body => {
+		const utf8String = iconv.decode(body, 'windows-1251');
+		const $ = cheerio.load(utf8String);
 
-			return scrapeItOriginal.scrapeHTML($, opts);
-		})
-		.catch(err => {
-			console.error(`Cannt parse ${url}`);
-		});
+		return scrapeItOriginal.scrapeHTML($, opts);
+	});
+	//.catch(err => {
+	//	console.error(`Cannt parse ${url}`);
+	//	return err;
+	//});
 }
 
 module.exports = scrapeIt;

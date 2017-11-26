@@ -1,6 +1,7 @@
 .idea
 node_modules
 assets
+helper
 config/default.json
 _errors
 _output

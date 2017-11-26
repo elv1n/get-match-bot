@@ -27,11 +27,12 @@ const afterScrape = ({ file, script }) => {
 		script,
 		'var videoObject ='
 	);
-	const { files } = JSON.parse(findAndClean);
+	const { files, duration } = JSON.parse(findAndClean);
 	const { url, height } = files.mp4;
 	return {
 		file: url,
-		quality: height
+		quality: height,
+		duration
 	};
 };
 

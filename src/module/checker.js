@@ -1,4 +1,3 @@
-const fs = require('fs');
 const db = require('../db');
 const telegram = require('../api/telegram');
 const download = require('../api/download');
@@ -28,19 +27,9 @@ const downloadProcess = async doc => {
  */
 const checkDownload = async () => {
 	const docs = await db.findBy({ download: false, inDownload: false });
-	//docs.reduce(async (promise, doc) => {
-	//	await promise;
-	//	console.log(doc);
-	//	if (utils.isOK(doc.link)) {
-	//		await reloadMatch(doc._id);
-	//		doc = await db.get(doc._id);
-	//	}
-	//	return downloadProcess(doc);
-	//}, Promise.resolve());
-	//Async download
 	await Promise.all(
 		docs.map(async doc => {
-			if (utils.isOK(doc.link)) {
+			if (utils.is.ok(doc.link)) {
 				await reloadMatch(doc._id);
 				doc = await db.get(doc._id);
 			}
@@ -63,7 +52,9 @@ const checkUploaded = async () => {
 		docs.map(async doc => {
 			await db.updateOrWait(doc._id, { inUpload: true });
 			try {
-				const uploadUrl = await stream(doc.localFilename);
+				const uploadUrl = await stream(doc.localFilename, {
+					duration: doc.duration
+				});
 				if (uploadUrl) {
 					await db.updateOrWait(doc._id, {
 						uploaded: true,
@@ -75,6 +66,19 @@ const checkUploaded = async () => {
 			}
 		})
 	);
+};
+
+const sendToTelegram = async doc => {
+	try {
+		const { message_id } = await telegram.sendMatch(doc);
+		await db.updateOrWait(doc._id, {
+			send: true,
+			message_id
+		});
+		utils.deleteFromDist(doc.localFilename);
+	} catch (e) {
+		console.log(`Cannot sent to telegram`);
+	}
 };
 
 /**
@@ -89,18 +93,29 @@ const checkUploadInit = async () => {
 	});
 	await Promise.all(
 		docs.map(async doc => {
-			const alreadyUpload = await utils.videoIsAvailable(doc.uploadUrl);
-			if (alreadyUpload) {
-				try {
-					const { message_id } = await telegram.sendMatch(doc);
-					await db.updateOrWait(doc._id, { send: true, message_id });
-					fs.unlink(utils.getDist(doc.localFilename), err => {
-						if (err) {
-							console.log('Cant delete file', err);
-						}
+			try {
+				const alreadyUpload = await utils.videoIsAvailable(
+					doc.uploadUrl
+				);
+
+				if (alreadyUpload) {
+					await sendToTelegram(doc);
+				} else {
+					// Wait when streambale handle video
+					setTimeout(() => {
+						checkUploadInit();
+					}, 1000 * 60);
+				}
+			} catch (e) {
+				if (e.statusCode === 404) {
+					utils.deleteFromDist(doc.localFilename);
+
+					await db.update(doc._id, {
+						download: false,
+						uploaded: false,
+						inDownload: false,
+						inUpload: false
 					});
-				} catch (e) {
-					console.log(`Cannot sent to telegram`);
 				}
 			}
 		})

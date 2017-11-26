@@ -20,6 +20,7 @@ const checkService = async link => {
 		}
 		return result;
 	} catch (err) {
+		console.log(`Cannot find video ${link}`);
 		return null;
 	}
 };

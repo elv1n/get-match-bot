@@ -19,26 +19,28 @@ const findQuality = name => {
 const parseOptions = opts => {
 	try {
 		const options = JSON.parse(opts);
-		const { videos } = JSON.parse(options.flashvars.metadata) || {};
-		return videos;
+		const { videos, movie } = JSON.parse(options.flashvars.metadata) || {};
+		return { videos, duration: parseFloat(movie.duration || 0) };
 	} catch (e) {
 		return null;
 	}
 };
 
-const afterScrape = ({ videos }) => {
+const afterScrape = ({ player }) => {
+	const { videos, duration } = player;
 	const { url, name } = videos.sort(
 		// Sort from higher to lower quality
 		(a, b) => QUALITY.INDEX.indexOf(a.name) < QUALITY.INDEX.indexOf(b.name)
 	)[0];
 	return {
 		file: editURL(url),
-		quality: findQuality(name)
+		quality: findQuality(name),
+		duration
 	};
 };
 
 const scrape = {
-	videos: {
+	player: {
 		selector: '[data-module="OKVideo"]',
 		attr: 'data-options',
 		convert: parseOptions
