@@ -7,14 +7,9 @@
 * Send message with new links to telegram channel
 
 ### Task list
-[x] Control video duration
-
-[x] When upload video less then 720p check links again for better quality
-
-[] Add vid.me hosting
-
-[] Add youtube hosting
-
-[] Upload video directly to streamable
-
-[] Control CPU memory when download a lot of videos
+* [X] Control video duration
+* [X] When upload video less then 720p check links again for better quality
+* [ ] Add vid.me hosting
+* [ ] Add youtube hosting
+* [ ] Upload video directly to streamable
+* [ ] Control CPU memory when download a lot of videos
