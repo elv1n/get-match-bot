@@ -9,8 +9,10 @@ if (!Array.isArray(settings)) {
 	console.error('Telegram config should be an array');
 }
 
+const createBot = token => new TelegramBot(token, { polling: true });
+
 const BOTS = settings.map(({ token, channel }) => ({
-	bot: new TelegramBot(token, { polling: true }),
+	bot: createBot(token),
 	channel
 }));
 
@@ -64,7 +66,9 @@ const editMatch = (bot, channel) => doc => {
  */
 ruleForBots(acceptMessage)();
 
+const multipleSendMatch = ruleForBots(sendMatch);
+
 module.exports = {
-	sendMatch: ruleForBots(sendMatch),
+	sendMatch: (...args) => Promise.all(multipleSendMatch(...args)), // Waif for all responses
 	editMatch: ruleForBots(editMatch)
 };
