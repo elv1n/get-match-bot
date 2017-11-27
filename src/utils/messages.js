@@ -1,21 +1,21 @@
-function match({ teams, date, uploadUrl, quality, videos }) {
-	const qualityInfo = videos ? '' : ` ${quality}p`;
+function match({ teams, date, uploadUrl }) {
 	return `<b>${teams.home} - ${teams.guest}</b> (${date})
 
-<a href="${uploadUrl}">Open in browser${qualityInfo}</a>`;
+<a href="${uploadUrl}">Open in browser</a>`;
 }
 
 function getButtons({ videos, uploadUrl, quality }) {
 	if (Array.isArray(videos)) {
 		const buttons = [...videos, { url: uploadUrl, quality }].map(
-			({ url, quality }) => [
-				{
-					text: quality,
-					url
-				}
-			]
+			({ url, quality }) =>
+				url && [
+					{
+						text: quality,
+						url
+					}
+				]
 		);
-		return { inline_keyboard: buttons };
+		return buttons.length ? { inline_keyboard: buttons } : null;
 	}
 	return null;
 }

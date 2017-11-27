@@ -77,10 +77,10 @@ const sendToTelegram = async doc => {
 				send: true
 			});
 		} else {
-			const { message_id } = await telegram.sendMatch(doc);
+			const bots = await telegram.sendMatch(doc);
 			await db.updateOrWait(doc._id, {
 				send: true,
-				message_id
+				bots
 			});
 		}
 		utils.deleteFromDist(doc.localFilename);

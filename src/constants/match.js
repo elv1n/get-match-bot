@@ -16,7 +16,8 @@ const searchFields = [
 	'send',
 	'message_id',
 	'quality',
-	'timestamp'
+	'timestamp',
+	'bots'
 ];
 
 module.exports = {

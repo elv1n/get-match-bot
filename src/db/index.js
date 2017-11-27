@@ -6,6 +6,7 @@ const PouchDB = require('pouchdb-node');
 PouchDB.plugin(require('pouchdb-find'));
 
 const resetInDownload = require('./methods/resetInDownload');
+const messageIdToBots = require('./methods/messageIdToBots');
 const MATCH = require('../constants/match');
 
 const utils = require('../utils');
@@ -32,7 +33,8 @@ const init = () =>
 				fields: MATCH.searchFields
 			}
 		})
-		.then(() => resetInDownload(db));
+		.then(() => resetInDownload(db))
+		.then(() => messageIdToBots(db));
 
 /**
  * Check id on existing in db
