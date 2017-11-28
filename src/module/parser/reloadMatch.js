@@ -13,7 +13,16 @@ const parseMatch = async _id => {
 
 const reloadMatch = async _id => {
 	const match = await parseMatch(_id);
-	return await db.update(_id, match);
+	if (match) {
+		return await db.update(_id, match);
+	}
+	try {
+		const doc = await db.get(_id);
+		return await db.remove(doc);
+	} catch (e) {
+		console.log(`Cannot remove doc ${_id}`, e);
+		return null;
+	}
 };
 module.exports = reloadMatch;
 module.exports.parseMatch = parseMatch;

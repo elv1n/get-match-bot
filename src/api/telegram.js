@@ -15,23 +15,30 @@ const createBot = token => new TelegramBot(token, { polling: true });
  * @returns {Promise.<void>}
  */
 const init = async () => {
-	BOTS = await Promise.all(
+	BOTS = (await Promise.all(
 		settings.map(async ({ token, channel, ...props }) => {
 			const bot = createBot(token);
-			const { id } = await bot.getMe();
-			return {
-				id,
-				bot,
-				channel,
-				...props
-			};
+			try {
+				const { id } = await bot.getMe();
+				return {
+					id,
+					bot,
+					channel,
+					...props
+				};
+			} catch (e) {
+				return null;
+			}
 		})
-	);
+	)).filter(Boolean);
 
 	/**
 	 * Run accept message with multiple bots
 	 */
 	ruleForBots(acceptMessage)();
+	if (!BOTS.length) {
+		throw new Error(`Cannot find valid bots`);
+	}
 	return BOTS;
 };
 
@@ -45,7 +52,15 @@ if (!Array.isArray(settings)) {
  */
 const ruleForBots = rule => (...args) =>
 	Promise.all(
-		BOTS.map(async ({ bot, channel }) => await rule(bot, channel)(...args))
+		BOTS.map(async ({ bot, channel, id }) => {
+			try {
+				return await rule(bot, channel)(...args);
+			} catch (e) {
+				console.log(`Bot ${id} returned error`);
+				//console.error(e);
+				return null;
+			}
+		})
 	);
 
 /**
@@ -89,12 +104,28 @@ const editMatch = (doc, { bot, channel, message_id }) => {
 	});
 };
 
-const handleTelegramResponse = res =>
-	res.map(({ message_id, from, chat }) => ({
-		message_id,
-		fromId: from.id,
-		chatId: chat.id
-	}));
+/**
+ * Handle response
+ * If some bot work with error - filter response from this bot
+ * @param res
+ */
+
+const handleTelegramResponse = res => {
+	const response = res
+		.map(
+			({ message_id, from, chat } = {}) =>
+				message_id && {
+					message_id,
+					fromId: from.id,
+					chatId: chat.id
+				}
+		)
+		.filter(Boolean);
+	if (!response.length) {
+		throw new Error(`Telegram bots not responded`);
+	}
+	return response;
+};
 
 const editMultipleMatch = async doc => {
 	const { bots } = doc;

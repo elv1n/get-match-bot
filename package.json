@@ -12,6 +12,7 @@
     "db:destroy": "node ./src/db/destroy"
   },
   "dependencies": {
+    "asyncro": "^2.0.1",
     "config": "^1.28.1",
     "download": "^6.2.5",
     "iconv-lite": "^0.4.19",

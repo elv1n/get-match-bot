@@ -1,3 +1,4 @@
+const { filter, map } = require('asyncro');
 const DB = require('../db');
 
 const utils = require('../utils');
@@ -29,40 +30,33 @@ const getHighlights = async url => {
 };
 
 const generateResults = async matches => {
-	matches = matches.filter(Boolean);
-
 	// Save new matches to DB
-	const newMatches = await Promise.all(
-		matches.map(async match => {
-			const exist = await DB.exist(match._id);
-			if (!exist) {
-				await DB.put({
-					...match,
-					...MATCH.defaultProps,
-					timestamp: new Date()
-				});
-				return true;
-			}
-			return false;
-		})
+	const newMatches = await map(
+		matches.filter(Boolean),
+		async match =>
+			await DB.put({
+				...match,
+				...MATCH.defaultProps,
+				timestamp: new Date()
+			})
 	);
 
-	const savedNewMatches = newMatches.filter(Boolean).length;
-	if (savedNewMatches) {
-		console.log('Save new matches: ', savedNewMatches);
-
-		await checker.run();
-	}
+	console.log('Save new matches: ', newMatches);
+	await checker.run();
 };
+
+const getNewMatches = links =>
+	filter(links, async ({ pathname }) => !await DB.exist(pathname));
 
 const run = async () => {
 	const highlights = await getHighlights(
 		PARSE_RESOURCE.HIGHLIGHTS + '/page/1/'
 	);
+	const newHighlights = await getNewMatches(highlights);
 	const links = await Promise.all(
-		highlights.map(async page => await parseUrl.getLinks(page))
+		newHighlights.map(async page => await parseUrl.getLinks(page))
 	);
-	await generateResults(links);
+	links.length && (await generateResults(links));
 };
 
 const init = () => setInterval(run, 1000 * 60 * 30);

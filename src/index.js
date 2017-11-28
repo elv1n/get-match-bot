@@ -8,5 +8,6 @@ db.init().then(async () => {
 	await telegram.init();
 	scrapper.run();
 	scrapper.init();
+	checker.run();
 	checker.init();
 });

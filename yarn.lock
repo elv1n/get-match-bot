@@ -214,6 +214,10 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "http://37.187.163.104:4873/asynckit/-/asynckit-0.4.0/c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
 
+asyncro@^2.0.1:
+  version "2.0.1"
+  resolved "http://37.187.163.104:4873/asyncro/-/asyncro-2.0.1/441783c134d0e13588af894bd4f8d1c834630d5d.tgz#441783c134d0e13588af894bd4f8d1c834630d5d"
+
 attempt-x@^1.1.0, attempt-x@^1.1.1:
   version "1.1.1"
   resolved "http://37.187.163.104:4873/attempt-x/-/attempt-x-1.1.1/fba64e96ce03c3e0bd92c92622061c4df387cb76.tgz#fba64e96ce03c3e0bd92c92622061c4df387cb76"

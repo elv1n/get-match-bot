@@ -60,7 +60,7 @@ const update = (id, data) =>
 		.then(doc =>
 			db
 				.put(Object.assign({}, doc, data, { _rev: doc._rev }))
-				.then(() => console.log('up db', data))
+				.then(() => console.log(doc._id, data))
 		);
 
 /**

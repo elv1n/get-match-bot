@@ -28,7 +28,6 @@ const downloadSource = async video => {
 		return formData;
 	} catch (e) {
 		console.log('cannot download', video);
-		console.log(e);
 		return null;
 	}
 };

@@ -2,6 +2,7 @@ const db = require('../db');
 const telegram = require('../api/telegram');
 const download = require('../api/download');
 const stream = require('../api/stream');
+const { defaultProps } = require('../constants/match');
 const utils = require('../utils');
 
 const badQuality = require('./process/badQuality');
@@ -72,10 +73,11 @@ const checkUploaded = async () => {
 const sendToTelegram = async doc => {
 	try {
 		if (Array.isArray(doc.videos)) {
-			await telegram.editMatch(doc);
-			await db.updateOrWait(doc._id, {
-				send: true
-			});
+			const res = await telegram.editMatch(doc);
+			console.log(res);
+			//await db.updateOrWait(doc._id, {
+			//	send: true
+			//});
 		} else {
 			const bots = await telegram.sendMatch(doc);
 			await db.updateOrWait(doc._id, {
@@ -118,12 +120,7 @@ const checkUploadInit = async () => {
 				if (e.statusCode === 404) {
 					utils.deleteFromDist(doc.localFilename);
 
-					await db.update(doc._id, {
-						download: false,
-						uploaded: false,
-						inDownload: false,
-						inUpload: false
-					});
+					await db.update(doc._id, { ...defaultProps });
 				}
 			}
 		})
