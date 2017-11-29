@@ -93,6 +93,9 @@ const sendToTelegram = async _id => {
 		}
 		utils.deleteFromDist(doc.localFilename);
 	} catch (e) {
+		await db.updateOrWait(_id, {
+			send: true
+		});
 		console.log(`Cannot sent to telegram`);
 	}
 };
