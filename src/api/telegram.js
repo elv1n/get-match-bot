@@ -8,7 +8,7 @@ const settings = config.get('telegram');
 // Property to collect bots info
 let BOTS = null;
 
-const createBot = token => new TelegramBot(token, { polling: true });
+const createBot = token => new TelegramBot(token);
 
 /**
  * Init bots
@@ -35,7 +35,7 @@ const init = async () => {
 	/**
 	 * Run accept message with multiple bots
 	 */
-	ruleForBots(acceptMessage)();
+	ruleForBots(defaultBotListeners)();
 	if (!BOTS.length) {
 		throw new Error(`Cannot find valid bots`);
 	}
@@ -67,13 +67,17 @@ const ruleForBots = rule => (...args) =>
  * Return message when write directly to bot
  */
 
-const acceptMessage = bot => () =>
+const defaultBotListeners = bot => () => {
 	bot.on('message', msg =>
 		bot.sendMessage(
 			msg.chat.id,
 			'Sorry, we dont work directly with users now.'
 		)
 	);
+	//bot.on('polling_error', error => {
+	//	console.log('Catch polling error');
+	//});
+};
 
 /**
  * Send match details to telegram channel

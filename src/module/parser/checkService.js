@@ -9,7 +9,7 @@ const checkService = async link => {
 	const service = utils.getService(link);
 
 	if (!service) {
-		console.log('Service not found', link);
+		//console.log('Service not found', link);
 		return null;
 	}
 

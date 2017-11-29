@@ -3759,6 +3759,10 @@ unzip-response@^1.0.0:
   version "1.0.2"
   resolved "http://37.187.163.104:4873/unzip-response/-/unzip-response-1.0.2/b984f0877fc0a89c2c773cc1ef7b5b232b5b06fe.tgz#b984f0877fc0a89c2c773cc1ef7b5b232b5b06fe"
 
+urijs@^1.19.0:
+  version "1.19.0"
+  resolved "http://37.187.163.104:4873/urijs/-/urijs-1.19.0/d8aa284d0e7469703a6988ad045c4cbfdf08ada0.tgz#d8aa284d0e7469703a6988ad045c4cbfdf08ada0"
+
 url-parse-lax@^1.0.0:
   version "1.0.0"
   resolved "http://37.187.163.104:4873/url-parse-lax/-/url-parse-lax-1.0.0/7af8f303645e9bd79a272e7a14ac68bc0609da73.tgz#7af8f303645e9bd79a272e7a14ac68bc0609da73"

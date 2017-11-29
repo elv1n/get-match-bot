@@ -59,6 +59,6 @@ const run = async () => {
 	links.length && (await generateResults(links));
 };
 
-const init = () => setInterval(run, 1000 * 60 * 30);
+const init = () => setInterval(run, 1000 * 60 * 5);
 
 module.exports = { run, init };
