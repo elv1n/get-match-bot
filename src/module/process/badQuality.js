@@ -13,7 +13,7 @@ const badQuality = async () => {
 
 	docs.map(async doc => {
 		const match = await reloadMatch.parseMatch(doc._id);
-		if (match.quality > doc.quality) {
+		if (match && match.quality > doc.quality) {
 			const { videos = [], uploadUrl, quality } = doc;
 			if (!videos.some(video => video.quality === quality)) {
 				videos.push({ quality, url: uploadUrl });
