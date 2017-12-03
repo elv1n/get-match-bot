@@ -10,6 +10,7 @@ const badQuality = async () => {
 		quality: { $lt: 720 },
 		timestamp: { $gt: timestamp }
 	});
+
 	docs.map(async doc => {
 		const match = await reloadMatch.parseMatch(doc._id);
 		if (match.quality > doc.quality) {
@@ -17,7 +18,11 @@ const badQuality = async () => {
 			if (!videos.some(video => video.quality === quality)) {
 				videos.push({ quality, url: uploadUrl });
 			}
-			await db.update(doc._id, { ...MATCH.defaultProps, videos });
+			await db.update(doc._id, {
+				...MATCH.defaultProps,
+				...match,
+				videos
+			});
 		}
 	});
 };
