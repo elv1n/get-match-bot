@@ -18,7 +18,7 @@ const badQuality = async () => {
 			if (!videos.some(video => video.quality === quality)) {
 				videos.push({ quality, url: uploadUrl });
 			}
-			await db.update(doc._id, {
+			await db.updateOrWait(doc._id, {
 				...MATCH.defaultProps,
 				...match,
 				videos
